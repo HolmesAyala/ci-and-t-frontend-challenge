@@ -5,6 +5,7 @@ import Search from '@mui/icons-material/Search';
 import * as styled from './styled';
 
 import PokemonItem from './components/PokemonItem';
+import PokemonDialog from './components/PokemonDialog';
 
 import { getPokemonList, PokemonResult } from '../../api/pokemon/get-pokemon-list';
 
@@ -20,6 +21,10 @@ function Home() {
 	const [searchDebounced, setSearchDebounced] = useState('');
 
 	const [pokemonListBySearch, setPokemonListBySearch] = useState<PokemonResult[]>([]);
+
+	const [pokemonDialogIsOpen, setPokemonDialogIsOpen] = useState(false);
+
+	const [pokemonItemToShow, setPokemonItemToShow] = useState<PokemonResult | null>(null);
 
 	useEffect(() => {
 		const loadPokemonListFromApi = async () => {
@@ -47,6 +52,10 @@ function Home() {
 		);
 	}, [pokemonListFromApi, searchDebounced]);
 
+	const onCloseFromPokemonDialog = () => {
+		setPokemonDialogIsOpen(false);
+	};
+
 	const onChangeFromSearchField = (event: ChangeEvent<HTMLInputElement>) => {
 		const { value: search } = event.target;
 
@@ -57,6 +66,11 @@ function Home() {
 		debounceSearchTimeout = setTimeout(() => {
 			setSearchDebounced(search);
 		}, DEBOUNCE_SEARCH_TIME);
+	};
+
+	const onClickFromPokemonItem = (pokemonItem: PokemonResult) => {
+		setPokemonItemToShow(pokemonItem);
+		setPokemonDialogIsOpen(true);
 	};
 
 	const searchField: JSX.Element = (
@@ -79,12 +93,23 @@ function Home() {
 
 	const pokemonItemsToRender: JSX.Element[] = useMemo(() => {
 		return pokemonListBySearch.map((pokemonItem) => (
-			<PokemonItem key={pokemonItem.url} imageUrl={''} name={pokemonItem.name} />
+			<PokemonItem
+				key={pokemonItem.url}
+				imageUrl={''}
+				name={pokemonItem.name}
+				onClick={() => onClickFromPokemonItem(pokemonItem)}
+			/>
 		));
 	}, [pokemonListBySearch]);
 
 	return (
 		<>
+			<PokemonDialog
+				open={pokemonDialogIsOpen}
+				pokemonUrl={pokemonItemToShow?.url}
+				onClose={onCloseFromPokemonDialog}
+			/>
+
 			<styled.Title variant='h1'>Pokedex</styled.Title>
 
 			{searchField}
