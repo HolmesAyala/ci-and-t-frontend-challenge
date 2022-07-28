@@ -1,6 +1,11 @@
 import { useState, useEffect, ChangeEvent, useMemo } from 'react';
+
 import InputAdornment from '@mui/material/InputAdornment';
+import IconButton from '@mui/material/IconButton';
+import TextField from '@mui/material/TextField';
+
 import Search from '@mui/icons-material/Search';
+import Favorite from '@mui/icons-material/Favorite';
 
 import * as styled from './styled';
 
@@ -16,11 +21,19 @@ let debounceSearchTimeout: NodeJS.Timeout;
 function Home() {
 	const [pokemonListFromApi, setPokemonListFromApi] = useState<PokemonResult[]>([]);
 
+	const [favoritePokemonMap, setFavoritePokemonMap] = useState<{
+		[pokemonUrl: string]: boolean | undefined;
+	}>({});
+
 	const [search, setSearch] = useState('');
 
 	const [searchDebounced, setSearchDebounced] = useState('');
 
+	const [filterByFavorite, setFilterByFavorite] = useState(false);
+
 	const [pokemonListBySearch, setPokemonListBySearch] = useState<PokemonResult[]>([]);
+
+	const [pokemonListByFavorite, setPokemonListByFavorite] = useState<PokemonResult[]>([]);
 
 	const [pokemonDialogIsOpen, setPokemonDialogIsOpen] = useState(false);
 
@@ -45,12 +58,26 @@ function Home() {
 	}, []);
 
 	useEffect(() => {
-		setPokemonListBySearch(
-			pokemonListFromApi.filter((pokemonItem) =>
-				pokemonItem.name.toLowerCase().includes(searchDebounced.trim().toLowerCase())
-			)
-		);
+		if (!searchDebounced.trim()) {
+			setPokemonListBySearch(pokemonListFromApi);
+		} else {
+			setPokemonListBySearch(
+				pokemonListFromApi.filter((pokemonItem) =>
+					pokemonItem.name.toLowerCase().includes(searchDebounced.trim().toLowerCase())
+				)
+			);
+		}
 	}, [pokemonListFromApi, searchDebounced]);
+
+	useEffect(() => {
+		if (!filterByFavorite) {
+			setPokemonListByFavorite(pokemonListBySearch);
+		} else {
+			setPokemonListByFavorite(
+				pokemonListBySearch.filter((pokemonItem) => Boolean(favoritePokemonMap[pokemonItem.url]))
+			);
+		}
+	}, [pokemonListBySearch, filterByFavorite, favoritePokemonMap]);
 
 	const onCloseFromPokemonDialog = () => {
 		setPokemonDialogIsOpen(false);
@@ -68,13 +95,26 @@ function Home() {
 		}, DEBOUNCE_SEARCH_TIME);
 	};
 
+	const onClickFromFavoriteButtonFilter = () => {
+		setFilterByFavorite((currentValue) => !currentValue);
+	};
+
 	const onClickFromPokemonItem = (pokemonItem: PokemonResult) => {
 		setPokemonItemToShow(pokemonItem);
 		setPokemonDialogIsOpen(true);
 	};
 
+	const onChangeFavoriteFromPokemonItem = (pokemonItem: PokemonResult, isFavorite: boolean) => {
+		setFavoritePokemonMap((currentValue) => {
+			return {
+				...currentValue,
+				[pokemonItem.url]: isFavorite,
+			};
+		});
+	};
+
 	const searchField: JSX.Element = (
-		<styled.SearchField
+		<TextField
 			autoComplete='off'
 			fullWidth
 			variant='outlined'
@@ -92,18 +132,20 @@ function Home() {
 	);
 
 	const pokemonItemsToRender: JSX.Element[] = useMemo(() => {
-		return pokemonListBySearch.map((pokemonItem) => (
+		return pokemonListByFavorite.map((pokemonItem) => (
 			<PokemonItem
 				key={pokemonItem.url}
 				imageUrl={''}
 				name={pokemonItem.name}
+				isFavorite={Boolean(favoritePokemonMap[pokemonItem.url])}
 				onClick={() => onClickFromPokemonItem(pokemonItem)}
+				onChangeFavorite={(isFavorite) => onChangeFavoriteFromPokemonItem(pokemonItem, isFavorite)}
 			/>
 		));
-	}, [pokemonListBySearch]);
+	}, [pokemonListByFavorite, favoritePokemonMap]);
 
 	return (
-		<>
+		<styled.Home>
 			<PokemonDialog
 				open={pokemonDialogIsOpen}
 				pokemonUrl={pokemonItemToShow?.url}
@@ -112,10 +154,20 @@ function Home() {
 
 			<styled.Title variant='h1'>Pokedex</styled.Title>
 
-			{searchField}
+			<styled.Toolbar>
+				{searchField}
+
+				<IconButton
+					size='large'
+					color={filterByFavorite ? 'primary' : 'default'}
+					onClick={onClickFromFavoriteButtonFilter}
+				>
+					<Favorite />
+				</IconButton>
+			</styled.Toolbar>
 
 			<styled.PokemonList>{pokemonItemsToRender}</styled.PokemonList>
-		</>
+		</styled.Home>
 	);
 }
 

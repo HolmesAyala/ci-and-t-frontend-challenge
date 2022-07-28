@@ -2,10 +2,32 @@ import { styled, css } from '@mui/material/styles';
 import Typography, { TypographyProps } from '@mui/material/Typography';
 import TextField, { TextFieldProps } from '@mui/material/TextField';
 
+export const Home = styled('div')(
+	() => css`
+		max-width: 1280px;
+		margin: 0 auto;
+	`
+);
+
 export const Title = styled(Typography)<TypographyProps>(
 	({ theme }) => css`
 		font-size: ${theme.typography.h3.fontSize};
 		font-weight: ${theme.typography.fontWeightMedium};
+		padding: ${theme.spacing(2)};
+	`
+);
+
+export const Toolbar = styled('div')(
+	({ theme }) => css`
+		top: 0;
+		position: sticky;
+		padding: ${theme.spacing(2)};
+		display: grid;
+		grid-template-columns: 1fr 56px;
+		column-gap: ${theme.spacing(2)};
+		background-color: white;
+		z-index: ${theme.zIndex.appBar};
+		border-bottom: 1px solid ${theme.palette.grey[100]};
 	`
 );
 
