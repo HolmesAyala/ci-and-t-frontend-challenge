@@ -7,3 +7,12 @@ export const Title = styled(Typography)<TypographyProps>(
 		font-weight: ${theme.typography.fontWeightMedium};
 	`
 );
+
+export const Toolbar = styled('div')(
+	({ theme }) => css`
+		display: grid;
+		grid-template-columns: 1fr 56px;
+		margin: ${theme.spacing(3)} 0;
+		column-gap: ${theme.spacing(2)};
+	`
+);
