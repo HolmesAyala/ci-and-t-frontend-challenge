@@ -1,7 +1,7 @@
-import Typography from '@mui/material/Typography';
+import * as styled from './styled';
 
 function Home() {
-	return <Typography variant='h1'>Home</Typography>;
+	return <styled.Title variant='h1'>Pokedex</styled.Title>;
 }
 
 export default Home;
