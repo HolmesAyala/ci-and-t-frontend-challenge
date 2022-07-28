@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
+
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import IconButton from '@mui/material/IconButton';
@@ -10,6 +11,7 @@ import Height from '@mui/icons-material/Height';
 import List from '@mui/icons-material/List';
 
 import PokemonCharacteristic from './components/PokemonCharacteristic';
+import StatsChart, { StatItem } from './components/StatsChart';
 
 import * as styled from './styled';
 
@@ -25,6 +27,8 @@ export type PokemonDialogProps = {
 
 function PokemonDialog({ open, pokemonUrl, onClose }: PokemonDialogProps) {
 	const [pokemonDetailData, setPokemonDetailData] = useState<GetPokemonDetailData | null>(null);
+
+	const [chartStats, setChartStats] = useState<StatItem[]>([]);
 
 	const pokemonImageUrl: string = useMemo(
 		() =>
@@ -56,12 +60,20 @@ function PokemonDialog({ open, pokemonUrl, onClose }: PokemonDialogProps) {
 				const pokemonDetailDataLoaded = await getPokemonDetail(pokemonUrl);
 
 				setPokemonDetailData(pokemonDetailDataLoaded);
+
+				setChartStats(
+					pokemonDetailDataLoaded.stats.map((statItem) => ({
+						stat: statItem.stat.name,
+						value: statItem.base_stat,
+					}))
+				);
 			} catch (error) {
 				console.error(error);
 			}
 		};
 
 		setPokemonDetailData(null);
+		setChartStats([]);
 
 		if (pokemonUrl) {
 			loadPokemonDetailData(pokemonUrl);
@@ -75,7 +87,7 @@ function PokemonDialog({ open, pokemonUrl, onClose }: PokemonDialogProps) {
 	) : undefined;
 
 	return (
-		<Dialog open={open} fullWidth maxWidth='xs' onClose={onClose}>
+		<Dialog open={open} fullWidth maxWidth='sm' onClose={onClose}>
 			<styled.DialogTitleContainer fontWeight='bold'>
 				<span>{pokemonDetailData?.name ?? '-'}</span>
 
@@ -110,6 +122,8 @@ function PokemonDialog({ open, pokemonUrl, onClose }: PokemonDialogProps) {
 						value={pokemonDetailData?.order ?? '-'}
 					/>
 				</styled.Characteristics>
+
+				<StatsChart id='stats-chart' stats={chartStats} />
 			</DialogContent>
 		</Dialog>
 	);
