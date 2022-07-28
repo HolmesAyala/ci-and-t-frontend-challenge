@@ -1,15 +1,19 @@
-import { GlobalStyles } from '@mui/material';
+import { GlobalStyles, StyledEngineProvider } from '@mui/material';
 
-import { global as globalStyles } from './styles/global';
+import { GLOBAL_STYLES } from './styles/global';
 
 import Home from './pages/Home';
+
+const globalStyles = <GlobalStyles styles={GLOBAL_STYLES} />;
 
 function App() {
 	return (
 		<>
-			<GlobalStyles styles={globalStyles} />
+			<StyledEngineProvider injectFirst>
+				{globalStyles}
 
-			<Home />
+				<Home />
+			</StyledEngineProvider>
 		</>
 	);
 }

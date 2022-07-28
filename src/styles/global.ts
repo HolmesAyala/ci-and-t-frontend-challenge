@@ -1,7 +1,11 @@
 import { css } from '@mui/material/styles';
 
-import { fontsImport } from './fonts';
+import { FONTS_IMPORT } from './fonts';
 
-export const global = css`
-	${fontsImport}
+export const GLOBAL_STYLES = css`
+	${FONTS_IMPORT}
+
+	body {
+		margin: 0;
+	}
 `;
