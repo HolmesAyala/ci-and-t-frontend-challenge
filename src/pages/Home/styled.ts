@@ -16,3 +16,11 @@ export const Toolbar = styled('div')(
 		column-gap: ${theme.spacing(2)};
 	`
 );
+
+export const PokemonList = styled('div')(
+	({ theme }) => css`
+		display: grid;
+		grid-template-columns: repeat(auto-fit, 192px);
+		gap: ${theme.spacing(2)};
+	`
+);
