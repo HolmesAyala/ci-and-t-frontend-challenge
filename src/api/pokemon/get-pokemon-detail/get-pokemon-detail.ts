@@ -1,3 +1,8 @@
+export type StatItem = {
+	base_stat: number;
+	stat: { name: string };
+};
+
 export type GetPokemonDetailData = {
 	id: number;
 	name: string;
@@ -13,6 +18,7 @@ export type GetPokemonDetailData = {
 			};
 		};
 	};
+	stats: StatItem[];
 };
 
 export async function getPokemonDetail(pokemonUrl: string): Promise<GetPokemonDetailData> {
