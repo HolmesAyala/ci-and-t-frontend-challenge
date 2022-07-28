@@ -1,6 +1,10 @@
 export type GetPokemonDetailData = {
 	id: number;
 	name: string;
+	weight: number;
+	height: number;
+	base_experience: number;
+	order: number;
 	sprites: {
 		front_default: string | null;
 		other: {
