@@ -7,12 +7,13 @@ import ListItemText from '@mui/material/ListItemText';
 export type PokemonItemProps = {
 	imageUrl: string;
 	name: string;
+	onClick?: () => void;
 };
 
-function PokemonItem({ imageUrl, name }: PokemonItemProps) {
+function PokemonItem({ imageUrl, name, onClick }: PokemonItemProps) {
 	return (
 		<ListItem disablePadding>
-			<ListItemButton>
+			<ListItemButton onClick={onClick}>
 				<ListItemAvatar>
 					<Avatar src={imageUrl} alt={name} />
 				</ListItemAvatar>
