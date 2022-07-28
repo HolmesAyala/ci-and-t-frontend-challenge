@@ -5,11 +5,10 @@ import Typography from '@mui/material/Typography';
 export const PokemonItem = styled(Paper)(() => css``);
 
 export const PokemonImage = styled('img')(
-	({ theme }) => css`
+	() => css`
 		width: 192px;
 		height: 192px;
 		object-fit: cover;
-		padding: ${theme.spacing(1)};
 		box-sizing: border-box;
 		overflow: hidden;
 	`

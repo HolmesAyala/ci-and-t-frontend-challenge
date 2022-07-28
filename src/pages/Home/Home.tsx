@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, ChangeEvent, useMemo } from 'react';
 import InputAdornment from '@mui/material/InputAdornment';
 import Search from '@mui/icons-material/Search';
 
@@ -8,8 +8,18 @@ import PokemonItem from './components/PokemonItem';
 
 import { getPokemonList, PokemonResult } from '../../api/pokemon/get-pokemon-list';
 
+const DEBOUNCE_SEARCH_TIME: number = 200; // Milliseconds
+
+let debounceSearchTimeout: NodeJS.Timeout;
+
 function Home() {
 	const [pokemonListFromApi, setPokemonListFromApi] = useState<PokemonResult[]>([]);
+
+	const [search, setSearch] = useState('');
+
+	const [searchDebounced, setSearchDebounced] = useState('');
+
+	const [pokemonListBySearch, setPokemonListBySearch] = useState<PokemonResult[]>([]);
 
 	useEffect(() => {
 		const loadPokemonListFromApi = async () => {
@@ -29,9 +39,31 @@ function Home() {
 		loadPokemonListFromApi();
 	}, []);
 
-	const pokemonItems: JSX.Element[] = pokemonListFromApi.map((pokemonItem) => (
-		<PokemonItem key={pokemonItem.url} imageUrl='' name={pokemonItem.name} />
-	));
+	useEffect(() => {
+		setPokemonListBySearch(
+			pokemonListFromApi.filter((pokemonItem) =>
+				pokemonItem.name.toLowerCase().includes(searchDebounced.trim().toLowerCase())
+			)
+		);
+	}, [pokemonListFromApi, searchDebounced]);
+
+	const onChangeFromSearchField = (event: ChangeEvent<HTMLInputElement>) => {
+		const { value: search } = event.target;
+
+		setSearch(search);
+
+		clearInterval(debounceSearchTimeout);
+
+		debounceSearchTimeout = setTimeout(() => {
+			setSearchDebounced(search);
+		}, DEBOUNCE_SEARCH_TIME);
+	};
+
+	const pokemonItemsToRender: JSX.Element[] = useMemo(() => {
+		return pokemonListBySearch.map((pokemonItem) => (
+			<PokemonItem key={pokemonItem.url} imageUrl={''} name={pokemonItem.name} />
+		));
+	}, [pokemonListBySearch]);
 
 	return (
 		<>
@@ -49,9 +81,11 @@ function Home() {
 						</InputAdornment>
 					),
 				}}
+				value={search}
+				onChange={onChangeFromSearchField}
 			/>
 
-			<styled.PokemonList>{pokemonItems}</styled.PokemonList>
+			<styled.PokemonList>{pokemonItemsToRender}</styled.PokemonList>
 		</>
 	);
 }
