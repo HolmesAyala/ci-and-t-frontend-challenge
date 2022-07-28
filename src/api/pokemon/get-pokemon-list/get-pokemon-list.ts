@@ -10,14 +10,14 @@ export type PokemonResult = {
 	url: string;
 };
 
-export type GetPokemonListBody = {
+export type GetPokemonListData = {
 	count: number;
 	next: string | null;
 	previous: string | null;
 	results: PokemonResult[];
 };
 
-export async function getPokemonList(props?: GetPokemonListProps): Promise<GetPokemonListBody> {
+export async function getPokemonList(props?: GetPokemonListProps): Promise<GetPokemonListData> {
 	let queryParams: string = '';
 
 	if (props?.query) {
