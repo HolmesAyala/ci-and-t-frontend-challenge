@@ -59,6 +59,24 @@ function Home() {
 		}, DEBOUNCE_SEARCH_TIME);
 	};
 
+	const searchField: JSX.Element = (
+		<styled.SearchField
+			autoComplete='off'
+			fullWidth
+			variant='outlined'
+			placeholder='Search pokemon by name'
+			InputProps={{
+				startAdornment: (
+					<InputAdornment position='start'>
+						<Search />
+					</InputAdornment>
+				),
+			}}
+			value={search}
+			onChange={onChangeFromSearchField}
+		/>
+	);
+
 	const pokemonItemsToRender: JSX.Element[] = useMemo(() => {
 		return pokemonListBySearch.map((pokemonItem) => (
 			<PokemonItem key={pokemonItem.url} imageUrl={''} name={pokemonItem.name} />
@@ -69,21 +87,7 @@ function Home() {
 		<>
 			<styled.Title variant='h1'>Pokedex</styled.Title>
 
-			<styled.SearchField
-				autoComplete='off'
-				fullWidth
-				variant='outlined'
-				placeholder='Search pokemon by name'
-				InputProps={{
-					startAdornment: (
-						<InputAdornment position='start'>
-							<Search />
-						</InputAdornment>
-					),
-				}}
-				value={search}
-				onChange={onChangeFromSearchField}
-			/>
+			{searchField}
 
 			<styled.PokemonList>{pokemonItemsToRender}</styled.PokemonList>
 		</>

@@ -1,4 +1,8 @@
-import * as styled from './styled';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import Avatar from '@mui/material/Avatar';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import ListItemText from '@mui/material/ListItemText';
 
 export type PokemonItemProps = {
 	imageUrl: string;
@@ -7,13 +11,15 @@ export type PokemonItemProps = {
 
 function PokemonItem({ imageUrl, name }: PokemonItemProps) {
 	return (
-		<styled.PokemonItem>
-			<styled.PokemonImage src={imageUrl} />
+		<ListItem disablePadding>
+			<ListItemButton>
+				<ListItemAvatar>
+					<Avatar src={imageUrl} alt={name} />
+				</ListItemAvatar>
 
-			<styled.PokemonName variant='body1' title={name}>
-				{name}
-			</styled.PokemonName>
-		</styled.PokemonItem>
+				<ListItemText primary={name} />
+			</ListItemButton>
+		</ListItem>
 	);
 }
 

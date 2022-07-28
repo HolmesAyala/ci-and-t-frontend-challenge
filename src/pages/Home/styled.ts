@@ -15,10 +15,11 @@ export const SearchField = styled(TextField)<TextFieldProps>(
 	`
 );
 
-export const PokemonList = styled('div')(
+export const PokemonList = styled('ul')(
 	({ theme }) => css`
 		display: grid;
-		grid-template-columns: repeat(auto-fit, 192px);
+		grid-template-columns: repeat(auto-fit, 256px);
 		gap: ${theme.spacing(2)};
+		padding: 0;
 	`
 );
