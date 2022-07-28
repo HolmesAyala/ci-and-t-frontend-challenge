@@ -11,6 +11,7 @@ export const PokemonImage = styled('img')(
 		object-fit: cover;
 		padding: ${theme.spacing(1)};
 		box-sizing: border-box;
+		overflow: hidden;
 	`
 );
 
