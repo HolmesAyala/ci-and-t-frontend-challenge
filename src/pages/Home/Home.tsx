@@ -4,7 +4,7 @@ import Search from '@mui/icons-material/Search';
 
 import * as styled from './styled';
 
-import PokemonItem from '../../components/PokemonItem';
+import PokemonItem from './components/PokemonItem';
 
 function Home() {
 	return (
