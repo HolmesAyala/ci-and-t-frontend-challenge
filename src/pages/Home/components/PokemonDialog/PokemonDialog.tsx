@@ -97,6 +97,8 @@ function PokemonDialog({ open, pokemonUrl, onClose }: PokemonDialogProps) {
 			<DialogContent>
 				<styled.PokemonImage src={pokemonImageUrl} alt={pokemonDetailData?.name} />
 
+				<styled.SectionTitle variant='h3'>Characteristics</styled.SectionTitle>
+
 				<styled.Characteristics>
 					<PokemonCharacteristic
 						icon={<MonitorWeight fontSize='large' />}
@@ -122,6 +124,8 @@ function PokemonDialog({ open, pokemonUrl, onClose }: PokemonDialogProps) {
 						value={pokemonDetailData?.order ?? '-'}
 					/>
 				</styled.Characteristics>
+
+				<styled.SectionTitle variant='h3'>Stats</styled.SectionTitle>
 
 				<StatsChart id='stats-chart' stats={chartStats} />
 			</DialogContent>
