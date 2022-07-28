@@ -1,5 +1,4 @@
 import InputAdornment from '@mui/material/InputAdornment';
-
 import Search from '@mui/icons-material/Search';
 
 import * as styled from './styled';
