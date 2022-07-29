@@ -10,6 +10,8 @@ import Pagination from '@mui/material/Pagination';
 import Search from '@mui/icons-material/Search';
 import Favorite from '@mui/icons-material/Favorite';
 
+import pokemonIcon from './assets/pokemon-icon.png';
+
 import * as styled from './styled';
 
 import PokemonItem from './components/PokemonItem';
@@ -198,7 +200,9 @@ function Home() {
 				onClose={onCloseFromPokemonDialog}
 			/>
 
-			<styled.Title variant='h1'>Pokédex</styled.Title>
+			<styled.Title variant='h1'>
+				<styled.PokemonIcon src={pokemonIcon} /> Pokédex
+			</styled.Title>
 
 			<styled.Toolbar>
 				{searchField}

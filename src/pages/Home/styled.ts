@@ -9,12 +9,23 @@ export const Home = styled('div')(
 	`
 );
 
+export const PokemonIcon = styled('img')(
+	({ theme }) => css`
+		width: 64px;
+		height: 64px;
+		object-fit: contain;
+		margin-right: ${theme.spacing(2)};
+	`
+);
+
 export const Title = styled(Typography)<TypographyProps>(
 	({ theme }) => css`
 		font-size: ${theme.typography.h3.fontSize};
 		font-weight: ${theme.typography.fontWeightBold};
 		padding: ${theme.spacing(2)};
 		color: ${theme.palette.primary.main};
+		display: flex;
+		align-items: center;
 	`
 );
 
