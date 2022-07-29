@@ -81,13 +81,19 @@ function PokemonDialog({ open, pokemonUrl, onClose }: PokemonDialogProps) {
 	}, [pokemonUrl]);
 
 	const closeButton: JSX.Element | undefined = onClose ? (
-		<IconButton onClick={onClose}>
+		<IconButton aria-label='Close dialog' onClick={onClose}>
 			<Close />
 		</IconButton>
 	) : undefined;
 
 	return (
-		<Dialog open={open} fullWidth maxWidth='sm' onClose={onClose}>
+		<Dialog
+			aria-label='Pokemon description dialog'
+			open={open}
+			fullWidth
+			maxWidth='sm'
+			onClose={onClose}
+		>
 			<styled.DialogTitleContainer fontWeight='bold'>
 				<span>{pokemonDetailData?.name ?? '-'}</span>
 

@@ -22,7 +22,7 @@ import { getPokemonList, PokemonResult } from '../../api/pokemon/get-pokemon-lis
 import { getPokemonSpriteUrl } from './utils/get-pokemon-sprite-url';
 import { pokemonItemMatchSearch } from './utils/pokemon-item-match-search';
 
-const DEFAULT_ITEMS_PER_PAGE = 40;
+export const DEFAULT_ITEMS_PER_PAGE = 40;
 
 const DEBOUNCE_SEARCH_TIME = 200; // Milliseconds
 

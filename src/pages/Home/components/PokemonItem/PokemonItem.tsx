@@ -42,7 +42,7 @@ function PokemonItem({
 				</IconButton>
 			}
 		>
-			<ListItemButton onClick={onClick}>
+			<ListItemButton aria-label='Select pokemon item' onClick={onClick}>
 				<ListItemAvatar>
 					<Avatar src={imageUrl} alt={name} />
 				</ListItemAvatar>
