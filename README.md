@@ -16,7 +16,7 @@ The pokemon details was implemented by a dialog instead of a independent page.
 
 #### ✅ Visualice some pokemon data with a chart
 
-The [suggested library](https://www.amcharts.com) was used to show the pokemon stats correctly in a chart. But I had some issues with the library in the testing pase (See **Extra suggestions**).
+The [suggested library](https://www.amcharts.com) was used to show the pokemon stats correctly in a chart. But I had some issues with the library in the testing phase (See **Extra suggestions**).
 
 #### ✅ Be able to add Pokemon to a “favorites” list and filter by only favorite Pokemons
 
