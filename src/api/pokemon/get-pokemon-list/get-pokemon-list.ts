@@ -1,3 +1,5 @@
+import { environmentVars } from '../../../environment-vars';
+
 export type GetPokemonListProps = {
 	query?: {
 		limit?: number;
@@ -30,7 +32,7 @@ export async function getPokemonList(props?: GetPokemonListProps): Promise<GetPo
 		queryParams = urlSearchParams.toString();
 	}
 
-	const response = await fetch(`https://pokeapi.co/api/v2/pokemon?${queryParams}`);
+	const response = await fetch(`${environmentVars.api.baseUrl}/pokemon?${queryParams}`);
 
 	const body = await response.json();
 

@@ -11,6 +11,7 @@ import { pokemonItemMatchSearch } from './utils/pokemon-item-match-search';
 const getPokemonListMock = jest.spyOn(getPokemonListModule, 'getPokemonList');
 
 describe('Home', () => {
+	// Used to know the total items (count)
 	const getPokemonListDataMockFirstCall: GetPokemonListData = {
 		count: 20,
 		next: `https://pokeapi.co/api/v2/pokemon?offset=1&limit=1`,
