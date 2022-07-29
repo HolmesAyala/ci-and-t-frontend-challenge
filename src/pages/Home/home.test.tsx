@@ -154,4 +154,22 @@ describe('Home', () => {
 			});
 		});
 	});
+
+	test('Should mark pokemon as favorite', async () => {
+		render(<Home />);
+
+		await waitFor(() => {
+			const pokemonItems = screen.getAllByLabelText('Pokemon item');
+
+			expect(pokemonItems).toHaveLength(getPokemonListDataMockWithFullData.count);
+		});
+
+		let favoriteButtons = screen.getAllByLabelText('Mark pokemon as favorite');
+
+		expect(favoriteButtons[0]).toHaveAttribute('aria-pressed', 'false');
+
+		userEvent.click(favoriteButtons[0]);
+
+		expect(favoriteButtons[0]).toHaveAttribute('aria-pressed', 'true');
+	});
 });

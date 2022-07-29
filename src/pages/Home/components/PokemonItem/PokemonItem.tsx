@@ -32,7 +32,12 @@ function PokemonItem({
 			aria-label='Pokemon item'
 			disablePadding
 			secondaryAction={
-				<IconButton onClick={onClickFromFavoriteButton} color={isFavorite ? 'primary' : 'default'}>
+				<IconButton
+					aria-label='Mark pokemon as favorite'
+					aria-pressed={isFavorite}
+					onClick={onClickFromFavoriteButton}
+					color={isFavorite ? 'primary' : 'default'}
+				>
 					{isFavorite ? <Favorite /> : <FavoriteBorder />}
 				</IconButton>
 			}
