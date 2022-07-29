@@ -21,9 +21,11 @@ export async function getPokemonList(props?: GetPokemonListProps): Promise<GetPo
 	let queryParams: string = '';
 
 	if (props?.query) {
-		const urlSearchParams = new URLSearchParams(
-			Object.entries(props.query).map((entry) => [entry[0], String(entry[1])])
+		const entriesKeysAsStrings: [string, string][] = Object.entries(props.query).map(
+			([key, value]) => [key, String(value)]
 		);
+
+		const urlSearchParams = new URLSearchParams(entriesKeysAsStrings);
 
 		queryParams = urlSearchParams.toString();
 	}
