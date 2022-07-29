@@ -42,7 +42,7 @@ function PokemonItem({
 					<Avatar src={imageUrl} alt={name} />
 				</ListItemAvatar>
 
-				<ListItemText primary={name} />
+				<ListItemText primary={name} primaryTypographyProps={{ 'aria-label': 'Pokemon name' }} />
 			</ListItemButton>
 		</ListItem>
 	);

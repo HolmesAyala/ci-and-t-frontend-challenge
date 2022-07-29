@@ -20,6 +20,7 @@ import PokemonDialog from './components/PokemonDialog';
 import { getPokemonList, PokemonResult } from '../../api/pokemon/get-pokemon-list';
 
 import { getPokemonSpriteUrl } from './utils/get-pokemon-sprite-url';
+import { pokemonItemMatchSearch } from './utils/pokemon-item-match-search';
 
 const DEFAULT_ITEMS_PER_PAGE = 40;
 
@@ -84,7 +85,7 @@ function Home() {
 		} else {
 			setPokemonListBySearch(
 				pokemonListFromApi.filter((pokemonItem) =>
-					pokemonItem.name.toLowerCase().includes(searchDebounced.trim().toLowerCase())
+					pokemonItemMatchSearch(pokemonItem, searchDebounced)
 				)
 			);
 		}

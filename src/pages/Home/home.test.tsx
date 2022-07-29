@@ -1,9 +1,14 @@
 import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import Home from './Home';
 
 import * as getPokemonList from '../../api/pokemon/get-pokemon-list/get-pokemon-list';
 import { GetPokemonListData } from '../../api/pokemon/get-pokemon-list';
+
+import { pokemonItemMatchSearch } from './utils/pokemon-item-match-search';
+
+const getPokemonListMock = jest.spyOn(getPokemonList, 'getPokemonList');
 
 const getPokemonListDataMockFirstCall: GetPokemonListData = {
 	count: 20,
@@ -106,19 +111,47 @@ const getPokemonListDataMockWithFullData: GetPokemonListData = {
 };
 
 describe('Home', () => {
-	test('Should render pokemon list', async () => {
-		const getPokemonListMock = jest.spyOn(getPokemonList, 'getPokemonList');
-
+	beforeEach(() => {
 		getPokemonListMock
 			.mockResolvedValueOnce(getPokemonListDataMockFirstCall)
 			.mockResolvedValueOnce(getPokemonListDataMockWithFullData);
+	});
 
+	afterEach(() => {
+		getPokemonListMock.mockClear();
+	});
+
+	test('Should render pokemon list', async () => {
 		render(<Home />);
 
 		await waitFor(() => {
 			const pokemonItems = screen.getAllByLabelText('Pokemon item');
 
 			expect(pokemonItems).toHaveLength(getPokemonListDataMockWithFullData.count);
+		});
+	});
+
+	test('Should filter pokemon by search', async () => {
+		render(<Home />);
+
+		const searchField = screen.getByPlaceholderText('Search pokemon by name');
+
+		const searchValue = 'ar';
+
+		userEvent.type(searchField, searchValue);
+
+		const resultsBySearch = getPokemonListDataMockWithFullData.results.filter((pokemonResult) =>
+			pokemonItemMatchSearch(pokemonResult, searchValue)
+		);
+
+		await waitFor(() => {
+			const pokemonNameElements = screen.getAllByLabelText('Pokemon name');
+
+			expect(pokemonNameElements).toHaveLength(resultsBySearch.length);
+
+			pokemonNameElements.forEach((pokemonNameElement, index) => {
+				expect(pokemonNameElement).toHaveTextContent(resultsBySearch[index].name);
+			});
 		});
 	});
 });
