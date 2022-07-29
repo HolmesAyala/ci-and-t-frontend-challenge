@@ -211,7 +211,7 @@ function Home() {
 				<Tooltip title={<Typography>Filter by favorite</Typography>}>
 					<IconButton
 						aria-label='Filter by favorite'
-						aria-selected={filterByFavorite}
+						aria-pressed={filterByFavorite}
 						size='large'
 						color={filterByFavorite ? 'primary' : 'default'}
 						onClick={onClickFromFavoriteButtonFilter}

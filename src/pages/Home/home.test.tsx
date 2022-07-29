@@ -164,12 +164,56 @@ describe('Home', () => {
 			expect(pokemonItems).toHaveLength(getPokemonListDataMockWithFullData.count);
 		});
 
+		let [firstFavoriteButton] = screen.getAllByLabelText('Mark pokemon as favorite');
+
+		expect(firstFavoriteButton).toHaveAttribute('aria-pressed', 'false');
+
+		userEvent.click(firstFavoriteButton);
+
+		expect(firstFavoriteButton).toHaveAttribute('aria-pressed', 'true');
+	});
+
+	test('Should filter pokemon by favorite', async () => {
+		render(<Home />);
+
+		await waitFor(() => {
+			const pokemonItems = screen.getAllByLabelText('Pokemon item');
+
+			expect(pokemonItems).toHaveLength(getPokemonListDataMockWithFullData.count);
+		});
+
 		let favoriteButtons = screen.getAllByLabelText('Mark pokemon as favorite');
 
-		expect(favoriteButtons[0]).toHaveAttribute('aria-pressed', 'false');
+		const pokemonIndexesAsFavorite = [0, 2, 4];
 
-		userEvent.click(favoriteButtons[0]);
+		for (let pokemonIndexAsFavorite of pokemonIndexesAsFavorite) {
+			expect(favoriteButtons[pokemonIndexAsFavorite]).toHaveAttribute('aria-pressed', 'false');
+		}
 
-		expect(favoriteButtons[0]).toHaveAttribute('aria-pressed', 'true');
+		for (let pokemonIndexAsFavorite of pokemonIndexesAsFavorite) {
+			userEvent.click(favoriteButtons[pokemonIndexAsFavorite]);
+		}
+
+		for (let pokemonIndexAsFavorite of pokemonIndexesAsFavorite) {
+			expect(favoriteButtons[pokemonIndexAsFavorite]).toHaveAttribute('aria-pressed', 'true');
+		}
+
+		const filterByFavoriteButton = screen.getByLabelText('Filter by favorite');
+
+		expect(filterByFavoriteButton).toHaveAttribute('aria-pressed', 'false');
+
+		userEvent.click(filterByFavoriteButton);
+
+		expect(filterByFavoriteButton).toHaveAttribute('aria-pressed', 'true');
+
+		const pokemonItems = screen.getAllByLabelText('Pokemon item');
+
+		expect(pokemonItems).toHaveLength(pokemonIndexesAsFavorite.length);
+
+		favoriteButtons = screen.getAllByLabelText('Mark pokemon as favorite');
+
+		for (let favoriteButton of favoriteButtons) {
+			expect(favoriteButton).toHaveAttribute('aria-pressed', 'true');
+		}
 	});
 });
