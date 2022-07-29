@@ -17,6 +17,8 @@ import PokemonDialog from './components/PokemonDialog';
 
 import { getPokemonList, PokemonResult } from '../../api/pokemon/get-pokemon-list';
 
+import { getPokemonSpriteUrl } from './utils/get-pokemon-sprite-url';
+
 const DEFAULT_ITEMS_PER_PAGE = 40;
 
 const DEBOUNCE_SEARCH_TIME = 200; // Milliseconds
@@ -165,7 +167,7 @@ function Home() {
 		return pokemonListPaginated.map((pokemonItem) => (
 			<PokemonItem
 				key={pokemonItem.url}
-				imageUrl={''}
+				imageUrl={getPokemonSpriteUrl(pokemonItem.url.slice(0, -1))}
 				name={pokemonItem.name}
 				isFavorite={Boolean(favoritePokemonMap[pokemonItem.url])}
 				onClick={() => onClickFromPokemonItem(pokemonItem)}
