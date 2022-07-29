@@ -29,6 +29,7 @@ function PokemonItem({
 
 	return (
 		<ListItem
+			aria-label='Pokemon item'
 			disablePadding
 			secondaryAction={
 				<IconButton onClick={onClickFromFavoriteButton} color={isFavorite ? 'primary' : 'default'}>

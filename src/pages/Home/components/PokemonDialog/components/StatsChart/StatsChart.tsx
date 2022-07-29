@@ -1,8 +1,5 @@
 import { useState, useEffect } from 'react';
 
-import * as am5 from '@amcharts/amcharts5';
-import * as am5xy from '@amcharts/amcharts5/xy';
-
 export type StatItem = {
 	stat: string;
 	value: number;
@@ -13,10 +10,17 @@ export type StatsChartProps = {
 	stats: StatItem[];
 };
 
-function StatsChart({ id, stats }: StatsChartProps) {
-	const [chartYAxis, setChartYAxis] = useState<am5xy.CategoryAxis<am5xy.AxisRenderer> | null>(null);
+const am5 = window.am5;
+const am5xy = window.am5xy;
 
-	const [chartSerie, setChartSerie] = useState<am5xy.ColumnSeries | null>(null);
+function StatsChart({ id, stats }: StatsChartProps) {
+	const [chartYAxis, setChartYAxis] = useState<{
+		data: { setAll: (data: StatItem[]) => void };
+	} | null>(null);
+
+	const [chartSerie, setChartSerie] = useState<{
+		data: { setAll: (data: StatItem[]) => void };
+	} | null>(null);
 
 	useEffect(() => {
 		const chartRoot = am5.Root.new(id);
