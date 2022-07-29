@@ -12,8 +12,9 @@ export const Home = styled('div')(
 export const Title = styled(Typography)<TypographyProps>(
 	({ theme }) => css`
 		font-size: ${theme.typography.h3.fontSize};
-		font-weight: ${theme.typography.fontWeightMedium};
+		font-weight: ${theme.typography.fontWeightBold};
 		padding: ${theme.spacing(2)};
+		color: ${theme.palette.primary.main};
 	`
 );
 

@@ -3,6 +3,9 @@ import { useState, useEffect, ChangeEvent, useMemo } from 'react';
 import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 import TextField from '@mui/material/TextField';
+import Tooltip from '@mui/material/Tooltip';
+import { Typography } from '@mui/material';
+import Pagination from '@mui/material/Pagination';
 
 import Search from '@mui/icons-material/Search';
 import Favorite from '@mui/icons-material/Favorite';
@@ -14,16 +17,22 @@ import PokemonDialog from './components/PokemonDialog';
 
 import { getPokemonList, PokemonResult } from '../../api/pokemon/get-pokemon-list';
 
-const DEBOUNCE_SEARCH_TIME: number = 200; // Milliseconds
+const DEFAULT_ITEMS_PER_PAGE = 40;
+
+const DEBOUNCE_SEARCH_TIME = 200; // Milliseconds
 
 let debounceSearchTimeout: NodeJS.Timeout;
 
 function Home() {
+	// Helper state
+
 	const [pokemonListFromApi, setPokemonListFromApi] = useState<PokemonResult[]>([]);
 
 	const [favoritePokemonMap, setFavoritePokemonMap] = useState<{
 		[pokemonUrl: string]: boolean | undefined;
 	}>({});
+
+	// Filters
 
 	const [search, setSearch] = useState('');
 
@@ -31,9 +40,17 @@ function Home() {
 
 	const [filterByFavorite, setFilterByFavorite] = useState(false);
 
+	const [currentPage, setCurrentPage] = useState(1);
+
+	// Lists filtered
+
 	const [pokemonListBySearch, setPokemonListBySearch] = useState<PokemonResult[]>([]);
 
 	const [pokemonListByFavorite, setPokemonListByFavorite] = useState<PokemonResult[]>([]);
+
+	const [pokemonListPaginated, setPokemonListPaginated] = useState<PokemonResult[]>([]);
+
+	// Detail dialog
 
 	const [pokemonDialogIsOpen, setPokemonDialogIsOpen] = useState(false);
 
@@ -79,6 +96,13 @@ function Home() {
 		}
 	}, [pokemonListBySearch, filterByFavorite, favoritePokemonMap]);
 
+	useEffect(() => {
+		const startIndex = (currentPage - 1) * DEFAULT_ITEMS_PER_PAGE;
+		const endIndex = startIndex + DEFAULT_ITEMS_PER_PAGE;
+
+		setPokemonListPaginated(pokemonListByFavorite.slice(startIndex, endIndex));
+	}, [pokemonListByFavorite, currentPage]);
+
 	const onCloseFromPokemonDialog = () => {
 		setPokemonDialogIsOpen(false);
 	};
@@ -91,11 +115,13 @@ function Home() {
 		clearInterval(debounceSearchTimeout);
 
 		debounceSearchTimeout = setTimeout(() => {
+			setCurrentPage(1);
 			setSearchDebounced(search);
 		}, DEBOUNCE_SEARCH_TIME);
 	};
 
 	const onClickFromFavoriteButtonFilter = () => {
+		setCurrentPage(1);
 		setFilterByFavorite((currentValue) => !currentValue);
 	};
 
@@ -111,6 +137,10 @@ function Home() {
 				[pokemonItem.url]: isFavorite,
 			};
 		});
+	};
+
+	const onChangeFromPagination = (event: ChangeEvent<unknown>, page: number) => {
+		setCurrentPage(page);
 	};
 
 	const searchField: JSX.Element = (
@@ -132,7 +162,7 @@ function Home() {
 	);
 
 	const pokemonItemsToRender: JSX.Element[] = useMemo(() => {
-		return pokemonListByFavorite.map((pokemonItem) => (
+		return pokemonListPaginated.map((pokemonItem) => (
 			<PokemonItem
 				key={pokemonItem.url}
 				imageUrl={''}
@@ -142,7 +172,21 @@ function Home() {
 				onChangeFavorite={(isFavorite) => onChangeFavoriteFromPokemonItem(pokemonItem, isFavorite)}
 			/>
 		));
-	}, [pokemonListByFavorite, favoritePokemonMap]);
+	}, [pokemonListPaginated, favoritePokemonMap]);
+
+	const totalPages = Math.ceil(pokemonListByFavorite.length / DEFAULT_ITEMS_PER_PAGE);
+
+	const pagination: JSX.Element | undefined =
+		totalPages > 1 ? (
+			<Pagination
+				sx={{ my: ({ spacing }) => spacing(3) }}
+				color='primary'
+				page={currentPage}
+				count={Math.ceil(pokemonListByFavorite.length / DEFAULT_ITEMS_PER_PAGE)}
+				size='large'
+				onChange={onChangeFromPagination}
+			/>
+		) : undefined;
 
 	return (
 		<styled.Home>
@@ -152,21 +196,29 @@ function Home() {
 				onClose={onCloseFromPokemonDialog}
 			/>
 
-			<styled.Title variant='h1'>Pokedex</styled.Title>
+			<styled.Title variant='h1'>Pokédex</styled.Title>
 
 			<styled.Toolbar>
 				{searchField}
 
-				<IconButton
-					size='large'
-					color={filterByFavorite ? 'primary' : 'default'}
-					onClick={onClickFromFavoriteButtonFilter}
-				>
-					<Favorite />
-				</IconButton>
+				<Tooltip title={<Typography>Filter by favorite</Typography>}>
+					<IconButton
+						aria-label='Filter by favorite'
+						aria-selected={filterByFavorite}
+						size='large'
+						color={filterByFavorite ? 'primary' : 'default'}
+						onClick={onClickFromFavoriteButtonFilter}
+					>
+						<Favorite />
+					</IconButton>
+				</Tooltip>
 			</styled.Toolbar>
 
+			{pagination}
+
 			<styled.PokemonList>{pokemonItemsToRender}</styled.PokemonList>
+
+			{pagination}
 		</styled.Home>
 	);
 }
