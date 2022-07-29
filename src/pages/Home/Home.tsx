@@ -218,6 +218,12 @@ function Home() {
 
 			<styled.PokemonList>{pokemonItemsToRender}</styled.PokemonList>
 
+			{(searchDebounced.trim() || filterByFavorite) && pokemonItemsToRender.length === 0 ? (
+				<styled.EmptyMessage variant='body1'>
+					There are no pokemon that match the search criteria.
+				</styled.EmptyMessage>
+			) : undefined}
+
 			{pagination}
 		</styled.Home>
 	);

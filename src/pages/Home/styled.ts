@@ -46,3 +46,12 @@ export const PokemonList = styled('ul')(
 		padding: 0;
 	`
 );
+
+export const EmptyMessage = styled(Typography)<TypographyProps>(
+	({ theme }) => css`
+		padding: ${theme.spacing(2)};
+		text-align: center;
+		background-color: ${theme.palette.grey[200]};
+		border-radius: 4px;
+	`
+);
