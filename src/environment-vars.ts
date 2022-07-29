@@ -7,7 +7,7 @@ export type EnvironmentVars = {
 
 export const environmentVars: EnvironmentVars = {
 	api: {
-		baseUrl: process.env.API_BASE_URL ?? 'WITHOUT_BASE_URL',
+		baseUrl: process.env.REACT_APP_API_BASE_URL ?? 'WITHOUT_BASE_URL',
 	},
-	assetsBaseUrl: process.env.ASSETS_BASE_URL ?? 'WITHOUT_BASE_URL',
+	assetsBaseUrl: process.env.REACT_APP_ASSETS_BASE_URL ?? 'WITHOUT_BASE_URL',
 };
